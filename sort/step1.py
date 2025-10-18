@@ -9,7 +9,7 @@ args = parser.parse_args()
 target_dir = args.target_dir
 mutual_unfollow_path = os.path.join(source_dir, "mutual_unfollow.txt")
 
-with open(mutual_unfollow_path, 'w') as mutual_unfollow_file:
+with open(mutual_unfollow_path, 'w', encoding='utf-8') as mutual_unfollow_file:
     for filename in os.listdir(target_dir):
         if filename.endswith('.json'):
             target_file_path = os.path.join(target_dir, filename)
@@ -17,7 +17,7 @@ with open(mutual_unfollow_path, 'w') as mutual_unfollow_file:
 
             if not os.path.exists(source_file_path):
                 try:
-                    with open(target_file_path, 'r') as target_file:
+                    with open(target_file_path, 'r', encoding='utf-8') as target_file:
                         data = json.load(target_file)
                         if 'id' in data and isinstance(data['id'], str):
                             mutual_unfollow_file.write(f"{data['id']}\n")

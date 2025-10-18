@@ -297,15 +297,17 @@ async def main():
         if file.startswith(f"twitter-{FOLLOWERS_STRING}"):
             src_path = os.path.join(DOWNLOAD_DIR, file)
             dest_path = os.path.join('./temp', "twitter-Followers-raw.json")
-            os.rename(src_path, dest_path)
+            # 修改以适应跨盘迁移，例：浏览器保存在c盘，代码在d盘
+            shutil.move(src_path, dest_path)
         if file.startswith(f"twitter-{FOLLOWING_STRING}"):
             src_path = os.path.join(DOWNLOAD_DIR, file)
             dest_path = os.path.join('./temp', "twitter-Following-raw.json")
-            os.rename(src_path, dest_path)
+            shutil.move(src_path, dest_path)
     print("Success")
     await asyncio.to_thread(runpy.run_path, "sort.py", run_name="__main__")
     os.removedirs('./temp', ignore_errors=True)
     config.set('General', 'NOT_FIRST_RUN', 'true')
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -13,7 +13,10 @@ last_fetch = None
 value = 0
 repeat = 0
 rate_retry = 0
-terminal_width = os.get_terminal_size().columns
+try:
+    terminal_width = os.get_terminal_size().columns
+except OSError:
+    terminal_width = 80  # 默认终端宽度
 
 async def send_js_code(uri, script):
     async with websockets.connect(uri) as websocket:
@@ -56,9 +59,9 @@ async def check_page_content(uri, target_number):
 
     try:
         if args.following:
-            js_code = "parseInt(document.querySelectorAll('.text-sm.text-base-content.leading-5.text-opacity-70.m-0')[1].innerText.match(/\d+/)[0]);"
+            js_code = r"parseInt(document.querySelectorAll('.text-sm.text-base-content.leading-5.text-opacity-70.m-0')[1].innerText.match(/\d+/)[0]);"
         else:
-            js_code = "parseInt(document.querySelectorAll('.text-sm.text-base-content.leading-5.text-opacity-70.m-0')[0].innerText.match(/\d+/)[0]);"
+            js_code = r"parseInt(document.querySelectorAll('.text-sm.text-base-content.leading-5.text-opacity-70.m-0')[0].innerText.match(/\d+/)[0]);"
         response = await send_js_code(uri, js_code)
 
         value = response.get("result", {}).get("result", {}).get("value", 0)
